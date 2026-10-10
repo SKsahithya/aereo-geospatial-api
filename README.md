@@ -122,6 +122,61 @@ The API returns appropriate HTTP errors for unsupported file types, invalid ZIP 
 ## Storage
 
 Uploaded files are saved in the `uploads/` directory. Processed file information is stored in memory and is not retained after the application restarts.
+## Architecture
+
+The application is built using FastAPI and GeoPandas.
+
+- **API layer:** FastAPI provides endpoints for file upload, file information, and feature measurements.
+- **File-processing layer:** GeoPandas reads KML files and ZIP archives containing Shapefiles and extracts feature geometries, attributes, and CRS information.
+- **Measurement layer:** Shapely and GeoPandas geometry operations are used to identify supported geometries and calculate measurements.
+- **Storage:** Uploaded files are saved in the `uploads/` directory. Processed file metadata is maintained in memory.
+
+### File-Processing Flow
+
+1. The client uploads a KML or ZIP Shapefile.
+2. The API validates the file extension and processes the file.
+3. GeoPandas reads the geospatial data and extracts its features.
+4. The application records feature information and the source CRS.
+5. Supported geometries are measured using a suitable projected CRS.
+6. The API returns file information or feature measurements as JSON.
+
+### Measurement and CRS Handling
+
+Geospatial measurements should not be calculated directly from longitude and latitude coordinates in EPSG:4326. The application estimates a suitable projected CRS and uses projected geometries for area and length calculations.
+
+- Polygon and MultiPolygon: area in square metres.
+- LineString and MultiLineString: length in metres.
+- Point: no measurement is required.
+- Unsupported geometry types: measurement fields are returned as `null` where applicable.
+
+## Design Decisions
+
+- **FastAPI:** Chosen for its lightweight API development, automatic OpenAPI documentation, and request validation.
+- **GeoPandas:** Used to read geospatial formats and manage feature data and coordinate reference systems.
+- **ZIP Shapefile uploads:** Shapefiles commonly consist of multiple related files, so the components are supplied together in a ZIP archive.
+- **Projected CRS:** A projected coordinate system is used for measurement calculations instead of measuring geographic coordinates in degrees.
+- **In-memory metadata:** A simple in-memory data structure keeps the initial implementation straightforward. It is suitable for a demonstration but does not persist file records across application restarts.
+
+## Learning Outcomes
+
+Through this project, I gained practical experience with:
+
+- Building REST APIs using FastAPI.
+- Reading KML and Shapefile data with GeoPandas.
+- Working with geometries, feature attributes, and coordinate reference systems.
+- Calculating geospatial area and length measurements.
+- Handling invalid uploads and missing file IDs.
+- Writing automated API tests with Pytest and TestClient.
+- Documenting and managing a Python project with Git and GitHub.
+
+## Future Scope
+
+- Persist file metadata and processing results in a database.
+- Add background processing for large geospatial files.
+- Improve upload validation, file-size limits, and ZIP archive security.
+- Add more comprehensive automated tests for points, multipart geometries, invalid CRS, and malformed files.
+- Support additional geospatial formats such as GeoJSON.
+- Improve CRS selection and add more measurement and validation options.
 
 ## Author
 

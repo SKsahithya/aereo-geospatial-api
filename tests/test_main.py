@@ -1,4 +1,7 @@
-
+import geopandas as gpd
+import pytest
+from shapely.geometry import Point
+from app.main import process_features
 from fastapi.testclient import TestClient
 from app.main import app
 
@@ -36,3 +39,11 @@ def test_measurements_not_found():
         "/api/files/invalid-test-id/measurements/"
     )
     assert response.status_code == 404
+def test_missing_crs_is_rejected():
+    gdf = gpd.GeoDataFrame(
+        {"name": ["test"]},
+        geometry=[Point(78.4, 17.4)],
+    )
+
+    with pytest.raises(ValueError, match="no CRS"):
+        process_features(gdf)
