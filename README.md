@@ -52,7 +52,6 @@ aereo-geospatial-api/
 git clone YOUR_GITHUB_REPOSITORY_URL
 cd aereo-geospatial-api
 ```
-
 git clone https://github.com/SKsahithya/aereo-geospatial-api.git
 cd aereo-geospatial-api
 
@@ -95,6 +94,79 @@ http://127.0.0.1:8003/docs
 | POST | `/api/files/` | Upload a KML or ZIP Shapefile |
 | GET | `/api/files/{file_id}/` | Retrieve file information |
 | GET | `/api/files/{file_id}/measurements/` | Retrieve feature measurements |
+### Example API Requests and Responses
+
+#### 1. Upload a geospatial file
+
+**Request**
+
+```bash
+curl -X POST "http://127.0.0.1:8003/api/files/" \
+  -F "file=@sample.kml"
+```
+
+**Example response**
+
+```json
+{
+  "id": "abc123",
+  "filename": "sample.kml",
+  "feature_count": 2,
+  "crs": "EPSG:4326",
+  "status": "COMPLETED"
+}
+```
+
+#### 2. Get file information
+
+**Request**
+
+```bash
+curl "http://127.0.0.1:8003/api/files/abc123/"
+```
+
+**Example response**
+
+```json
+{
+  "id": "abc123",
+  "filename": "sample.kml",
+  "feature_count": 2,
+  "crs": "EPSG:4326",
+  "status": "COMPLETED"
+}
+```
+
+#### 3. Get feature measurements
+
+**Request**
+
+```bash
+curl "http://127.0.0.1:8003/api/files/abc123/measurements/"
+```
+
+**Example response structure**
+
+```json
+{
+  "id": "abc123",
+  "filename": "sample.kml",
+  "feature_count": 2,
+  "measurements": [
+    {
+      "feature_id": 0,
+      "geometry_type": "Polygon",
+      "crs": "EPSG:4326",
+      "properties": {},
+      "area_sq_m": 1180462.65,
+      "length_m": null
+    }
+  ]
+}
+```
+
+*Note: These are illustrative examples. The file ID, feature count, properties, and measurement values depend on the uploaded file.*
+
 
 ## How to Use
 
