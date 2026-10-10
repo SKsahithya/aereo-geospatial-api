@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+geopandas
+shapely
+pyproj
+fiona
+pytest
+httpx
