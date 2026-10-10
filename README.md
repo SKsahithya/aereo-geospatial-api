@@ -34,6 +34,8 @@ aereo-geospatial-api/
 ├── app/
 │   ├── __init__.py
 │   └── main.py
+├── tests/
+│   └── test_main.py
 ├── uploads/
 │   └── .gitkeep
 ├── sample.kml
@@ -51,7 +53,8 @@ git clone YOUR_GITHUB_REPOSITORY_URL
 cd aereo-geospatial-api
 ```
 
-Replace `YOUR_GITHUB_REPOSITORY_URL` with your actual repository URL.
+git clone https://github.com/SKsahithya/aereo-geospatial-api.git
+cd aereo-geospatial-api
 
 ### 2. Create a virtual environment
 
@@ -76,12 +79,12 @@ pip install -r requirements.txt
 From the project root directory, run:
 
 ```bash
-python -m uvicorn app.main:app --reload --port 8001
+python -m uvicorn app.main:app --reload --port 8003
 ```
 
 Open the interactive API documentation:
 
-http://127.0.0.1:8001/docs
+http://127.0.0.1:8003/docs
 
 ## API Endpoints
 
@@ -123,3 +126,13 @@ Uploaded files are saved in the `uploads/` directory. Processed file information
 ## Author
 
 Developed as part of the AEREO Geospatial File Measurement API assignment.
+
+## Run Tests
+
+Run the automated tests from the project root directory:
+
+```powershell
+python -m pytest -v
+```
+
+The tests cover the home endpoint, health check, unsupported file uploads, and missing file IDs.
